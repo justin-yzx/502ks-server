@@ -43,6 +43,29 @@ function search(collection,data) {
     })
 }
 
+function searchPage(collection,data) {
+    return new Promise(resolve => {
+        try{
+            let pagenum=data.pagenum?Number(data.pagenum):1
+            let pagesize=data.pagesize?Number(data.pagesize):10
+            delete data.pagenum
+            delete data.pagesize
+
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbase = db.db(DBNAME);
+                dbase.collection(collection). find(data).skip((pagenum-1)*pagesize).limit(pagesize).toArray(function(err, result) { // 返回集合中所有数据
+                    if (err) throw err;
+                    resolve(result)
+                    db.close();
+                });
+            });
+        }catch (e) {
+            resolve([])
+        }
+    })
+}
+
 
 function updata(collection,whereStr,update) {
     return new Promise(resolve => {
@@ -109,4 +132,5 @@ module.exports={
     updata:updata,
     updataMany:updataMany,
     deleteData:deleteData,
+    searchPage:searchPage,
 }

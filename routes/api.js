@@ -19,7 +19,9 @@ router.use('/getchapterlist',async (req,res) =>{
     let query={}
     if(param.id){
         query.bookid=param.id
-        let chapterList =await db.search('chapternum',query)
+        query.pagenum=param.pagenum
+        query.pagesize=param.pagesize
+        let chapterList =await db.searchPage('chapternum',query)
         res.json(data.suc(chapterList));
     }else {
         res.json(data.err('错误'));
