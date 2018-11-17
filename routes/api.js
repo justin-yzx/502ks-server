@@ -17,7 +17,7 @@ router.use('/getbooklist',async (req,res) =>{
 router.use('/getbookinfo',async (req,res) =>{
     let param = req.query || req.params;
     let query={}
-    query.id=param.id
+    query.bookid=param.id
     let bookList =await db.search('bookname',query)
     res.json(data.suc(bookList));
 });
