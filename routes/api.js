@@ -48,7 +48,7 @@ router.use('/getcontent',async (req,res) =>{
 
         let lastNum=[];
         let nextNum=[];
-        if(content[0]['bookid']){
+        if(content[0]){
             lastNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)-1})
             nextNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)+1})
         }
