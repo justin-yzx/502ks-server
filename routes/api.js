@@ -48,7 +48,9 @@ router.use('/getcontent',async (req,res) =>{
 
         let lastNum=[];
         let nextNum=[];
+        let thisNum=[];
         if(content[0]){
+            thisNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)})
             lastNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)-1})
             nextNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)+1})
         }
@@ -56,6 +58,7 @@ router.use('/getcontent',async (req,res) =>{
             book:content[0]?content[0]:{},
             lastNum:lastNum[0],
             nextNum:nextNum[0],
+            thisNum:thisNum[0],
         }));
     }else {
         res.json(data.err('错误'));
