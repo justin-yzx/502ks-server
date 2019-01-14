@@ -46,7 +46,7 @@ router.use('/getchapterlist',async (req,res) =>{
 router.use('/getcontent',async (req,res) =>{
     let param = req.query || req.params;
     let query={}
-    if(param.id&&param.num){
+    if(param.id){
         query.chapterid=param.id
         let lastNum=[];
         let nextNum=[];
