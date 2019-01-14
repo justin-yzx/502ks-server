@@ -52,8 +52,8 @@ router.use('/getcontent',async (req,res) =>{
         let nextNum=[];
         let thisNum=[];
         thisNum=await db.search('chapternum',{chapterid:param.id})
-        lastNum=await db.search('chapternum',{bookid:thisNum[0]['bookid'],num:parseInt(thisNum[0]['bookid'])-1})
-        nextNum=await db.search('chapternum',{bookid:thisNum[0]['bookid'],num:parseInt(thisNum[0]['bookid'])+1})
+        lastNum=await db.search('chapternum',{bookid:thisNum[0]['bookid'],num:parseInt(thisNum[0]['num'])-1})
+        nextNum=await db.search('chapternum',{bookid:thisNum[0]['bookid'],num:parseInt(thisNum[0]['num'])+1})
         let book=thisNum[0]
         let url=`${URL}test/${book.bookid}/${book.chapterid}.htm`
 
