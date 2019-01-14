@@ -1,7 +1,11 @@
+let URL='http://www.530p.com/'
 const express = require('express');
 const router = express.Router();
 const db = require('../units/mongo');
 const data =require('../units/data');
+const request =require('../units/request')
+const iconv = require('iconv-lite');
+const cheerio = require('cheerio');
 
 //获取书籍列表
 router.use('/getbooklist',async (req,res) =>{
@@ -44,22 +48,34 @@ router.use('/getcontent',async (req,res) =>{
     let query={}
     if(param.id&&param.num){
         query.chapterid=param.id
-        let content =await db.search('chaptercontent',query)
-
         let lastNum=[];
         let nextNum=[];
         let thisNum=[];
-        if(content[0]){
-            thisNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)})
-            lastNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)-1})
-            nextNum=await db.search('chapternum',{bookid:content[0]['bookid'],num:parseInt(param.num)+1})
-        }
-        res.json(data.suc({
-            book:content[0]?content[0]:{},
-            lastNum:lastNum[0],
-            nextNum:nextNum[0],
-            thisNum:thisNum[0],
-        }));
+        thisNum=await db.search('chapternum',{chapterid:param.id})
+        lastNum=await db.search('chapternum',{bookid:thisNum[0]['bookid'],num:parseInt(thisNum[0]['bookid'])-1})
+        nextNum=await db.search('chapternum',{bookid:thisNum[0]['bookid'],num:parseInt(thisNum[0]['bookid'])+1})
+        let book=thisNum[0]
+        let url=`${URL}test/${book.bookid}/${book.chapterid}.htm`
+
+        request(url).then( function ({errBody,resBody,body}) {
+            body = iconv.decode(body,'gbk');
+            let $ = cheerio.load(body);
+            let table=$('#cp_content')
+            let txt=table.text().replace(/　/g, "\n").toString();
+            res.json(data.suc({
+                book:{
+                    booktxt:txt,
+                    bookid:book.bookid,
+                    chapterid:book.chapterid
+                },
+                lastNum:lastNum[0],
+                nextNum:nextNum[0],
+                thisNum:thisNum[0],
+            }));
+        })
+
+
+
     }else {
         res.json(data.err('错误'));
     }
