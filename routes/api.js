@@ -9,14 +9,32 @@ const cheerio = require('cheerio');
 
 //获取首页推荐模块
 router.use('/getindexlist',async (req,res) =>{
-    let param = req.query || req.params;
-    let query={}
-    if(param.type){
-        query.type=param.type
-    }
-    let bookList =await db.search('indexdata',query)
+    let bookList =await db.search('indexdata',{})
     res.json(data.suc(bookList));
 });
+
+
+//获取首页推荐模块
+router.use('/getsearch',async (req,res) =>{
+    let param = req.query || req.params;
+    let query={}
+    if(param.str){
+        let reg=new RegExp(param.str)
+        query={
+            $or:[
+                {bookname:{$regex:reg}},
+                {bookauther:{$regex:reg}},
+                {desc:{$regex:reg}},
+            ]
+        }
+        let bookList =await db.search('bookname',query)
+        res.json(data.suc(bookList));
+    }else {
+        res.json(data.suc([]));
+    }
+});
+
+
 
 
 //获取书籍详情
