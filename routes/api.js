@@ -7,16 +7,17 @@ const request =require('../units/request')
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 
-//获取书籍列表
-router.use('/getbooklist',async (req,res) =>{
+//获取首页推荐模块
+router.use('/getindexlist',async (req,res) =>{
     let param = req.query || req.params;
     let query={}
     if(param.type){
         query.type=param.type
     }
-    let bookList =await db.search('bookname',query)
+    let bookList =await db.search('indexdata',query)
     res.json(data.suc(bookList));
 });
+
 
 //获取书籍详情
 router.use('/getbookinfo',async (req,res) =>{
@@ -73,9 +74,6 @@ router.use('/getcontent',async (req,res) =>{
                 thisNum:thisNum[0],
             }));
         })
-
-
-
     }else {
         res.json(data.err('错误'));
     }
