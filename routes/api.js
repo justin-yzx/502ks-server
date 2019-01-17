@@ -13,8 +13,19 @@ router.use('/getindexlist',async (req,res) =>{
     res.json(data.suc(bookList));
 });
 
+//获取搜索页推荐模块
+router.use('/getsearchrecommend',async (req,res) =>{
+    let bookList =await db.search('searchrecommend',{})
+    res.json(data.suc(bookList));
+});
 
-//获取首页推荐模块
+//获取书籍详情页模块推荐
+router.use('/getpageinforecommend',async (req,res) =>{
+    let bookList =await db.search('pageinforecommend',{})
+    res.json(data.suc(bookList));
+});
+
+//搜索
 router.use('/getsearch',async (req,res) =>{
     let param = req.query || req.params;
     let query={}
@@ -34,9 +45,6 @@ router.use('/getsearch',async (req,res) =>{
     }
 });
 
-
-
-
 //获取书籍详情
 router.use('/getbookinfo',async (req,res) =>{
     let param = req.query || req.params;
@@ -46,7 +54,7 @@ router.use('/getbookinfo',async (req,res) =>{
     res.json(data.suc(bookList));
 });
 
-//获取章节列表
+//获取章节列表(分页)
 router.use('/getchapterlist',async (req,res) =>{
     let param = req.query || req.params;
     let query={}
@@ -55,6 +63,19 @@ router.use('/getchapterlist',async (req,res) =>{
         query.pagenum=param.pagenum
         query.pagesize=param.pagesize
         let chapterList =await db.searchPage('chapternum',query)
+        res.json(data.suc(chapterList));
+    }else {
+        res.json(data.err('错误'));
+    }
+});
+
+//获取章节列表全部
+router.use('/getallchapterlist',async (req,res) =>{
+    let param = req.query || req.params;
+    let query={}
+    if(param.id){
+        query.bookid=param.id
+        let chapterList =await db.search('chapternum',query,{num:1})
         res.json(data.suc(chapterList));
     }else {
         res.json(data.err('错误'));

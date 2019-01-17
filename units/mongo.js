@@ -26,13 +26,13 @@ function insert(collection,data) {
 }
 
 
-function search(collection,data) {
+function search(collection,data,sort) {
     return new Promise(resolve => {
         try{
             MongoClient.connect(url, function(err, db) {
                 if (err) throw err;
                 var dbase = db.db(DBNAME);
-                dbase.collection(collection). find(data).toArray(function(err, result) { // 返回集合中所有数据
+                dbase.collection(collection).find(data).sort(sort?sort:{}).toArray(function(err, result) { // 返回集合中所有数据
                     if (err) throw err;
                     resolve(result)
                     db.close();
