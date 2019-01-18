@@ -52,7 +52,7 @@ module.exports = {
             <span @click="setMenu=!setMenu"><img src="/img/set.png"/><em>设置</em></span>
             <span @click="setDayNight('night')" v-if="!nightDay"><img src="/img/night.png"/><em>夜间</em></span>
             <span @click="setDayNight('day')" v-else><img src="/img/day.png"/><em>白天</em></span>
-            <span><img src="img/next.png"/><em @click="nuxt">下一章</em></span>
+            <span><img src="/img/next.png"/><em @click="nuxt">下一章</em></span>
         </div>
     </div>
 </div>

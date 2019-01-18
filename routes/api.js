@@ -8,6 +8,7 @@ const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 const fs=require('fs');
 const getHtml = require('../units/getHtml.js')
+const replaceStr = require('../units/replaceStr.js')
 
 //获取首页推荐模块
 router.use('/getindexlist',async (req,res) =>{
@@ -122,7 +123,7 @@ router.use('/getcontent',async (req,res) =>{
                 nuxtid:nextNum.length>0?nextNum[0].chapterid:'',
                 thisid:book.chapterid,
                 thistitl:thisNum.length>0?nextNum[0].chaptername:'',
-                content:txt
+                content:replaceStr.replaceStr(txt)
             }
             //生成文件
             fs.writeFile('/app/book/'+book.chapterid+'.html',getHtml.getHtml(obj),'utf8',function(error){
