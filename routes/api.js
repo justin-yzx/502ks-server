@@ -7,6 +7,7 @@ const request =require('../units/request')
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 const fs=require('fs');
+const getHtml=request('./getHtml.js')
 
 //获取首页推荐模块
 router.use('/getindexlist',async (req,res) =>{
@@ -115,13 +116,21 @@ router.use('/getcontent',async (req,res) =>{
                 thisNum:thisNum[0],
             }));
 
+            var obj={
+                bookid:book.bookid,
+                lastid:lastNum.length>0?lastNum[0].chapterid:'',
+                nuxtid:nextNum.length>0?nextNum[0].chapterid:'',
+                thisid:book.chapterid,
+                thistitl:thisNum.length>0?nextNum[0].chaptername:'',
+                content:txt
+            }
             //生成文件
-            fs.writeFile('/app/book/123.txt','你好nodejs 覆盖','utf8',function(error){
+            fs.writeFile('/app/book/'+book.chapterid+'.html',getHtml.getHtml(obj),'utf8',function(error){
                 if(error){
                     console.log(error);
                     return false;
                 }
-                console.log('写入成功');
+                console.log(book.bookid+'书'+book.chapterid+'章'+'写入成功');
             })
 
         })
