@@ -6,6 +6,7 @@ const data =require('../units/data');
 const request =require('../units/request')
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
+const fs=require('fs');
 
 //获取首页推荐模块
 router.use('/getindexlist',async (req,res) =>{
@@ -102,6 +103,7 @@ router.use('/getcontent',async (req,res) =>{
             let $ = cheerio.load(body);
             let table=$('#cp_content')
             let txt=table.text().replace(/　/g, "\n").toString();
+            //
             res.json(data.suc({
                 book:{
                     booktxt:txt,
@@ -112,6 +114,16 @@ router.use('/getcontent',async (req,res) =>{
                 nextNum:nextNum[0],
                 thisNum:thisNum[0],
             }));
+
+            //生成文件
+            fs.writeFile('/app/book/123.txt','你好nodejs 覆盖','utf8',function(error){
+                if(error){
+                    console.log(error);
+                    return false;
+                }
+                console.log('写入成功');
+            })
+
         })
     }else {
         res.json(data.err('错误'));
