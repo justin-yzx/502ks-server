@@ -7,7 +7,7 @@ const request =require('../units/request')
 const iconv = require('iconv-lite');
 const cheerio = require('cheerio');
 const fs=require('fs');
-const getHtml = require('./getHtml.js')
+const getHtml = require('../units/getHtml.js')
 
 //获取首页推荐模块
 router.use('/getindexlist',async (req,res) =>{
