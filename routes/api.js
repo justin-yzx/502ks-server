@@ -10,6 +10,18 @@ const fs=require('fs');
 const getHtml = require('../units/getHtml.js')
 const replaceStr = require('../units/replaceStr.js')
 
+//测试模块
+router.use('/getapilist',async (req,res) =>{
+    let param = req.query || req.params;
+    let reqdata={}
+    if(param.packageName){
+        reqdata['packageName']=param.packageName
+    }
+    let bookList =await db.search('urllist',reqdata)
+    res.json(data.suc(bookList));
+});
+
+
 //获取首页推荐模块
 router.use('/getindexlist',async (req,res) =>{
     let bookList =await db.search('indexdata',{})
