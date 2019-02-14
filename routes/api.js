@@ -10,7 +10,7 @@ const fs=require('fs');
 const getHtml = require('../units/getHtml.js')
 const replaceStr = require('../units/replaceStr.js')
 
-//测试模块
+//测试模块（公司使用）
 router.use('/getapilist',async (req,res) =>{
     let param = req.query || req.params;
     let reqdata={}
@@ -37,6 +37,23 @@ router.use('/getsearchrecommend',async (req,res) =>{
 //获取书籍详情页模块推荐
 router.use('/getpageinforecommend',async (req,res) =>{
     let bookList =await db.search('pageinforecommend',{})
+    res.json(data.suc(bookList));
+});
+
+//获取分类列表
+router.use('/getclassify',async (req,res) =>{
+    let bookList =await db.search('booktype',{})
+    res.json(data.suc(bookList));
+});
+
+//获取分类里面书籍列表
+router.use('/getclassifydetail',async (req,res) =>{
+    let param = req.query || req.params;
+    let query={}
+    query.type=param.type
+    query.pagenum=param.pagenum
+    query.pagesize=param.pagesize
+    let bookList =await db.searchPaging('bookname',query)
     res.json(data.suc(bookList));
 });
 
